@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=   , initial-scale=1.0">
+    <title>Prueba</title>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script>
+            async function get(){
+                const res = await fetch( 'http://127.0.0.1:3000/data.json', { mode: 'cors', headers: { 'Content-Type': 'application/json' } } );
+                const data = await res.json();
+                console.log( data );
+                return data;
+            }
+
+            async function process() {
+                const root = document.getElementById('root')
+                const data = await get();
+                let inputs = "";
+                for( let x in data ){
+                    inputs += `
+                        <label for="${x}">${x.toUpperCase()}: </label>
+                        <input 
+                            type="${ typeof data[x] === 'string'? 'text': 'number' }" 
+                            name="${ x }" 
+                            placeholder="Ingrese ${x}" />
+                            <br/>
+                        `
+                }
+                inputs += '<input type="submit" value="Guardar"><input type="reset" value="Cancelar">'
+                root.innerHTML = `<form>
+                        ${inputs}
+                    </form>`;
+            }
+
+            process();
+    </script>
+    
+</body>
+</html>
